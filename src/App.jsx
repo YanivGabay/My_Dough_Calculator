@@ -7,14 +7,18 @@ import Copyright from './components/Copyright';
 import { Recipe } from './classes/Recipe';
 import { Piziolo } from './classes/Piziolo';
 
+
+//  name, flour00Amount, semolinaAmount, saltAmount, waterAmount, yeastAmount, defaultBalls, defaultWeight
 const RECIPES = [
-  new Recipe("Recipe 1", 0.557, 0.050, 0.018, 0.368, 0.0014, 1, 250),
-  new Recipe("Recipe 2", 0.520, 0.030, 0.020, 0.360, 0.0010, 3, 270),
+  new Recipe("Ooni-ColdProof", 607, 0, 18, 368, 1.4, 4, 250),
+  new Recipe("Yaniv-ColdProof", 0.550, 0.050, 0.010, 0.360, 0.0014, 3, 330),
+  new Recipe("Bonci-ColdProof", 1000, 50, 25, 700, 3, 3, 370),
 ];
 
 const PIZIOLOS = [
-  new Piziolo("Piziolo 1", RECIPES[0]),
-  new Piziolo("Piziolo 2", RECIPES[1]),
+  new Piziolo("Cold Proof - Ooni", RECIPES[0]),
+  new Piziolo("Yaniv ", RECIPES[1]),
+  new Piziolo("Bonci ", RECIPES[2]),
 ];
 
 function App() {
@@ -28,31 +32,33 @@ function App() {
     const totalWeight = numBalls * ballWeight;
     const ingredients = recipe.calculateIngredients(totalWeight);
     setResults(ingredients);
-};
-const handleRecipeChange = (index) => {
-  setSelectedPiziolo(index);
-  setNumBalls(PIZIOLOS[index].getRecipe().defaultBalls);
-  setBallWeight(PIZIOLOS[index].getRecipe().defaultWeight);
-  setResults(null);
-};
+  };
+  const handleRecipeChange = (index) => {
+    setSelectedPiziolo(index);
+    setNumBalls(PIZIOLOS[index].getRecipe().defaultBalls);
+    setBallWeight(PIZIOLOS[index].getRecipe().defaultWeight);
+    setResults(null);
+  };
 
 
-return (
-  <Container maxWidth="md">
+  return (
+    <Container maxWidth="md">
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
-          <Typography variant="h3" gutterBottom textAlign="center">
-              Dough Calculator
-          </Typography>
+        <Typography variant="h3" gutterBottom textAlign="center">
+          Dough Calculator
+        </Typography>
+        <Box sx={{ width: '100%', mb: 2 }}>
           <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={PIZIOLOS} />
-          <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
-          <Button variant="contained" onClick={handleCalculate} sx={{ mt: 2 }}>
-              Calculate
-          </Button>
-          {results && <Results results={results} />}
-          <Copyright />
+        </Box>
+        <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
+        <Button variant="contained" onClick={handleCalculate} sx={{ mt: 2 }}>
+          Calculate
+        </Button>
+        {results && <Results results={results} />}
+        <Copyright />
       </Box>
-  </Container>
-);
+    </Container>
+  );
 }
 
 export default App;

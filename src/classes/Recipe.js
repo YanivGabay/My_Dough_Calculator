@@ -1,13 +1,14 @@
 
 
 export class Recipe {
-    constructor(name, flour00Ratio, semolinaRatio, saltRatio, waterRatio, yeastRatio, defaultBalls, defaultWeight, additionalOptions = {}) {
+    constructor(name, flour00Amount, semolinaAmount, saltAmount, waterAmount, yeastAmount, defaultBalls, defaultWeight, additionalOptions = {}) {
         this.name = name;
-        this.flour00Ratio = flour00Ratio;
-        this.semolinaRatio = semolinaRatio;
-        this.saltRatio = saltRatio;
-        this.waterRatio = waterRatio;
-        this.yeastRatio = yeastRatio;
+        this.sum = flour00Amount + semolinaAmount + saltAmount + waterAmount + yeastAmount;
+        this.flour00Ratio = flour00Amount / this.sum;
+        this.semolinaRatio = semolinaAmount / this.sum;
+        this.saltRatio = saltAmount / this.sum;
+        this.waterRatio = waterAmount / this.sum;
+        this.yeastRatio = yeastAmount / this.sum;
         this.defaultBalls = defaultBalls;
         this.defaultWeight = defaultWeight;
         this.additionalOptions = additionalOptions;
@@ -15,10 +16,10 @@ export class Recipe {
 
     calculateIngredients(totalWeight) {
         return {
-            flour00: (totalWeight * this.flour00Ratio).toFixed(2),
-            semolina: (totalWeight * this.semolinaRatio).toFixed(2),
-            salt: (totalWeight * this.saltRatio).toFixed(2),
-            water: (totalWeight * this.waterRatio).toFixed(2),
+            flour00: (totalWeight * this.flour00Ratio).toFixed(0),
+            semolina: (totalWeight * this.semolinaRatio).toFixed(0),
+            salt: (totalWeight * this.saltRatio).toFixed(0),
+            water: (totalWeight * this.waterRatio).toFixed(0),
             yeast: (totalWeight * this.yeastRatio).toFixed(2),
             //... operator is used to spread the additional options object into the result object
             //so if calculateAdditionalOptions returns an object with additional options,for example:
