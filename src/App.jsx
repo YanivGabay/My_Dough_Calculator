@@ -13,12 +13,14 @@ const RECIPES = [
   new Recipe("Ooni-ColdProof", 607, 0, 18, 368, 1.4, 4, 250),
   new Recipe("Yaniv-ColdProof", 0.550, 0.050, 0.010, 0.360, 0.0014, 3, 330),
   new Recipe("Bonci-ColdProof", 1000, 50, 25, 700, 3, 3, 370),
+  new Recipe("Coppola-Magazine", 590, 0, 12, 380, 1.75, 4, 250),
 ];
 
 const PIZIOLOS = [
   new Piziolo("Cold Proof - Ooni", RECIPES[0]),
   new Piziolo("Yaniv ", RECIPES[1]),
   new Piziolo("Bonci ", RECIPES[2]),
+  new Piziolo("Coppola Magazine ", RECIPES[3]),
 ];
 
 function App() {
