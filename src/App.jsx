@@ -7,7 +7,7 @@ import Copyright from './components/Copyright';
 import { Recipe } from './classes/Recipe';
 import { Piziolo } from './classes/Piziolo';
 
-
+import AppBar from './components/AppBar';
 
 
 //  name, flour00Amount, semolinaAmount, saltAmount, waterAmount, yeastAmount, defaultBalls, defaultWeight
@@ -47,14 +47,15 @@ function App() {
 
 
   return (
-    <Container maxWidth="md">
-      <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
+    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <AppBar />
+     
         <Typography variant="h3" gutterBottom textAlign="center">
           Dough Calculator
         </Typography>
-        <Box sx={{ width: '100%', mb: 2 }}>
-          <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={PIZIOLOS} />
-        </Box>
+       
+         <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={PIZIOLOS} />
+       
         <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
         <Button variant="contained" onClick={handleCalculate} sx={{ mt: 2 }}>
           Calculate
@@ -62,7 +63,7 @@ function App() {
         {results && <Results results={results} />}
         <Copyright />
       </Box>
-    </Container>
+ 
   );
 }
 
