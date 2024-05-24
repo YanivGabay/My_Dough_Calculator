@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Box, Typography, Button } from '@mui/material';
+import { Container, Box, Typography, Button ,Grid} from '@mui/material';
 import CalculatorForm from './components/CalculatorForm';
 import Results from './components/Results';
 import RecipeSelector from './components/RecipeSelector';
@@ -8,7 +8,7 @@ import { Recipe } from './classes/Recipe';
 import { Piziolo } from './classes/Piziolo';
 
 import AppBar from './components/AppBar';
-
+import Logo from './components/Logo';
 
 //  name, flour00Amount, semolinaAmount, saltAmount, waterAmount, yeastAmount, defaultBalls, defaultWeight
 // FUTURE: can add more fields to the recipes class, like proofing time,cold/room temp water, etc.
@@ -47,23 +47,19 @@ function App() {
 
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-      <AppBar />
-     
-        <Typography variant="h3" gutterBottom textAlign="center">
-          Dough Calculator
-        </Typography>
-       
-         <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={PIZIOLOS} />
-       
-        <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
-        <Button variant="contained" onClick={handleCalculate} sx={{ mt: 2 }}>
-          Calculate
-        </Button>
-        {results && <Results results={results} />}
-        <Copyright />
-      </Box>
- 
+    <Grid >
+      <AppBar sx={{m: 6}} />
+      <Logo />
+      <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={PIZIOLOS} />
+
+      <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
+      <Button variant="contained" onClick={handleCalculate} >
+        Calculate
+      </Button>
+      {results && <Results results={results} />}
+      <Copyright />
+    </Grid>
+
   );
 }
 

@@ -3,7 +3,7 @@ import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 function RecipeSelector({ selectedRecipe, setSelectedRecipe, recipes }) {
     return (
-        <FormControl fullWidth>
+        <FormControl>
             <InputLabel id="recipe-label">Piziolo</InputLabel>
             <Select
                 labelId="recipe-label"
