@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 
 function CalculatorForm({ numBalls, setNumBalls, ballWeight, setBallWeight }) {
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{textAlign:'center'}}>
             <Grid item xs={12}>
                 <TextField
                     id="numBalls"
@@ -14,7 +14,7 @@ function CalculatorForm({ numBalls, setNumBalls, ballWeight, setBallWeight }) {
                     onChange={(e) => setNumBalls(Number(e.target.value))}
                     inputProps={{ min: "1" }}
                     placeholder="Number of pizza balls"
-                    fullWidth
+                   
                 />
             </Grid>
             <Grid item xs={12}>
@@ -26,7 +26,7 @@ function CalculatorForm({ numBalls, setNumBalls, ballWeight, setBallWeight }) {
                     onChange={(e) => setBallWeight(Number(e.target.value))}
                     inputProps={{ min: "1" }}
                     placeholder="Weight of each ball (g)"
-                    fullWidth
+                   
                 />
             </Grid>
         </Grid>

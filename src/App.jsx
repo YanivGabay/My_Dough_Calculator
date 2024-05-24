@@ -6,7 +6,7 @@ import RecipeSelector from './components/RecipeSelector';
 import Copyright from './components/Copyright';
 import { Recipe } from './classes/Recipe';
 import { Piziolo } from './classes/Piziolo';
-
+import CalculateButton from './components/CalculateButton';
 import AppBar from './components/AppBar';
 import Logo from './components/Logo';
 
@@ -32,11 +32,16 @@ function App() {
   const [ballWeight, setBallWeight] = useState(PIZIOLOS[selectedPiziolo].getRecipe().defaultWeight);
   const [results, setResults] = useState(null);
 
-  const handleCalculate = () => {
+  const handleCalculateClick = () => {
+    console.log("Calculating ingredients for ", PIZIOLOS[selectedPiziolo].name);
     const recipe = PIZIOLOS[selectedPiziolo].getRecipe();
+    console.log("Recipe: ", recipe);
     const totalWeight = numBalls * ballWeight;
+    console.log("Total weight: ", totalWeight);
     const ingredients = recipe.calculateIngredients(totalWeight);
+    console.log("Ingredients: ", ingredients);
     setResults(ingredients);
+    console.log("Results: ", ingredients);
   };
   const handleRecipeChange = (index) => {
     setSelectedPiziolo(index);
@@ -53,9 +58,7 @@ function App() {
       <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={PIZIOLOS} />
 
       <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
-      <Button variant="contained" onClick={handleCalculate} >
-        Calculate
-      </Button>
+     <CalculateButton handleCalculateClick={handleCalculateClick} />
       {results && <Results results={results} />}
       <Copyright />
     </Grid>

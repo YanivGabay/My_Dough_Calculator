@@ -6,10 +6,10 @@ import Box from '@mui/material/Box';
 function Copyright() {
     return (
         <Box
-        sx={{ m: 2 }}
-        display="flex"
-        alignItems="center" >
-        <Typography variant="body2" color="text.secondary" align="center">
+        sx={{ m: 4 }}
+       
+        textAlign="center" >
+        <Typography variant="body2" color="text.secondary">
             {'Copyright © '}
             <Link color="inherit" href="tobeadded">
                 Yaniv Gabay
