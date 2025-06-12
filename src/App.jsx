@@ -1,68 +1,212 @@
-import React, { useState } from 'react';
-import { Container, Box, Typography, Button ,Grid} from '@mui/material';
-import CalculatorForm from './components/CalculatorForm';
-import Results from './components/Results';
-import RecipeSelector from './components/RecipeSelector';
-import Copyright from './components/Copyright';
-import { Recipe } from './classes/Recipe';
-import { Piziolo } from './classes/Piziolo';
-import CalculateButton from './components/CalculateButton';
-import AppBar from './components/AppBar';
-import Logo from './components/Logo';
+import React, { useState, useEffect } from 'react';
+import { 
+  Container, 
+  Box, 
+  Typography, 
+  ThemeProvider,
+  CssBaseline,
+  Fade,
+  Slide,
+  IconButton,
+  Fab,
+  Zoom,
+} from '@mui/material';
+import { 
+  LightMode, 
+  DarkMode, 
+  LocalPizza,
+  Restaurant,
+  Timer,
+  Scale,
+} from '@mui/icons-material';
 
-//  name, flour00Amount, semolinaAmount, saltAmount, waterAmount, yeastAmount, defaultBalls, defaultWeight
-// FUTURE: can add more fields to the recipes class, like proofing time,cold/room temp water, etc.
-const recipes = [
-  new Recipe("Ooni-ColdProof", { flour00: 607, semolina: 0, salt: 18, water: 368, yeast: 1.4, oliveOil: 20 }, 4, 250, { proofingTime: "24 hours", proofType: "cold" }),
-  new Recipe("Yaniv-ColdProof", { flour00: 550, semolina: 50, salt: 10, water: 360, yeast: 1.4, sugar: 15 }, 3, 330, { proofingTime: "48 hours", proofType: "cold" }),
-  new Recipe("Bonci-ColdProof", { flour00: 1000, semolina: 50, salt: 25, water: 700, yeast: 3 }, 3, 370, { proofingTime: "12 hours", proofType: "room" }),
-  new Recipe("Coppola-Magazine", { flour00: 590, semolina: 0, salt: 12, water: 380, yeast: 1.75 }, 4, 250, { proofingTime: "24 hours", proofType: "cold" })
-];
-
-const piziolos = [
-  new Piziolo("Cold Proof - Ooni", recipes[0]),
-  new Piziolo("Yaniv", recipes[1]),
-  new Piziolo("Bonci", recipes[2]),
-  new Piziolo("Coppola Magazine", recipes[3]),
-];
+import { lightTheme, darkTheme } from './theme';
+import HeroSection from './components/HeroSection';
+import RecipeGallery from './components/RecipeGallery';
+import CalculatorSection from './components/CalculatorSection';
+import ResultsDisplay from './components/ResultsDisplay';
+import Footer from './components/Footer';
+import { piziolos } from './data/recipes';
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
   const [selectedPiziolo, setSelectedPiziolo] = useState(0);
   const [numBalls, setNumBalls] = useState(piziolos[selectedPiziolo].getRecipe().defaultBalls);
   const [ballWeight, setBallWeight] = useState(piziolos[selectedPiziolo].getRecipe().defaultWeight);
   const [results, setResults] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [showResults, setShowResults] = useState(false);
+
+  const currentTheme = darkMode ? darkTheme : lightTheme;
+
+  useEffect(() => {
+    // Update defaults when recipe changes
+    const recipe = piziolos[selectedPiziolo].getRecipe();
+    setNumBalls(recipe.defaultBalls);
+    setBallWeight(recipe.defaultWeight);
+    setResults(null);
+    setShowResults(false);
+    setCurrentStep(2);
+  }, [selectedPiziolo]);
 
   const handleCalculateClick = () => {
-    console.log("Calculating ingredients for ", piziolos[selectedPiziolo].name);
     const recipe = piziolos[selectedPiziolo].getRecipe();
-    console.log("Recipe: ", recipe);
     const totalWeight = numBalls * ballWeight;
-    console.log("Total weight: ", totalWeight);
     const ingredients = recipe.calculateIngredients(totalWeight);
-    console.log("Ingredients: ", ingredients);
+    
     setResults(ingredients);
-    console.log("Results: ", ingredients);
+    setShowResults(true);
+    setCurrentStep(3);
+    
+    // Smooth scroll to results
+    setTimeout(() => {
+      document.getElementById('results-section')?.scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }, 300);
   };
+
   const handleRecipeChange = (index) => {
     setSelectedPiziolo(index);
-    setNumBalls(piziolos[index].getRecipe().defaultBalls);
-    setBallWeight(piziolos[index].getRecipe().defaultWeight);
-    setResults(null);
   };
 
+  const resetCalculator = () => {
+    setResults(null);
+    setShowResults(false);
+    setCurrentStep(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <Grid >
-      <AppBar sx={{m: 6}} />
-      <Logo />
-      <RecipeSelector selectedRecipe={selectedPiziolo} setSelectedRecipe={handleRecipeChange} recipes={piziolos} />
+    <ThemeProvider theme={currentTheme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          minHeight: '100vh',
+          background: currentTheme.palette.background.default,
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Animated background elements */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0.1,
+            backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3e%3cpath d=\'M20 20h60v60H20z\' fill=\'none\' stroke=\'%23FF6B35\' stroke-width=\'0.5\'/%3e%3c/svg%3e")',
+            backgroundSize: '50px 50px',
+            animation: 'float 20s ease-in-out infinite',
+            zIndex: 0,
+          }}
+        />
 
-      <CalculatorForm numBalls={numBalls} setNumBalls={setNumBalls} ballWeight={ballWeight} setBallWeight={setBallWeight} />
-     <CalculateButton handleCalculateClick={handleCalculateClick} />
-      {results && <Results results={results} />}
-      <Copyright />
-    </Grid>
+        {/* Theme Toggle */}
+        <Zoom in timeout={1000}>
+          <IconButton
+            onClick={() => setDarkMode(!darkMode)}
+            sx={{
+              position: 'fixed',
+              top: 20,
+              right: 20,
+              zIndex: 1000,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              backdropFilter: 'blur(10px)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+                transform: 'scale(1.1)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            {darkMode ? <LightMode /> : <DarkMode />}
+          </IconButton>
+        </Zoom>
 
+        {/* Reset FAB */}
+        {currentStep > 1 && (
+          <Zoom in timeout={500}>
+            <Fab
+              onClick={resetCalculator}
+              sx={{
+                position: 'fixed',
+                bottom: 20,
+                right: 20,
+                zIndex: 1000,
+                background: 'linear-gradient(45deg, #FF6B35, #FF8A65)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #E65100, #FF6B35)',
+                  transform: 'scale(1.1)',
+                },
+              }}
+            >
+              <Restaurant />
+            </Fab>
+          </Zoom>
+        )}
+
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+          {/* Hero Section */}
+          <Fade in timeout={1000}>
+            <Box>
+              <HeroSection currentStep={currentStep} />
+            </Box>
+          </Fade>
+
+          {/* Recipe Gallery */}
+          <Slide direction="up" in timeout={1200}>
+            <Box sx={{ mt: 6 }}>
+              <RecipeGallery
+                recipes={piziolos}
+                selectedRecipe={selectedPiziolo}
+                onRecipeSelect={handleRecipeChange}
+                currentStep={currentStep}
+              />
+            </Box>
+          </Slide>
+
+          {/* Calculator Section */}
+          {currentStep >= 2 && (
+            <Slide direction="up" in timeout={1400}>
+              <Box sx={{ mt: 6 }}>
+                <CalculatorSection
+                  numBalls={numBalls}
+                  setNumBalls={setNumBalls}
+                  ballWeight={ballWeight}
+                  setBallWeight={setBallWeight}
+                  onCalculate={handleCalculateClick}
+                  selectedRecipe={piziolos[selectedPiziolo]}
+                />
+              </Box>
+            </Slide>
+          )}
+
+          {/* Results Display */}
+          {showResults && (
+            <Fade in timeout={1000}>
+              <Box id="results-section" sx={{ mt: 6 }}>
+                <ResultsDisplay
+                  results={results}
+                  recipe={piziolos[selectedPiziolo].getRecipe()}
+                  numBalls={numBalls}
+                  ballWeight={ballWeight}
+                />
+              </Box>
+            </Fade>
+          )}
+
+          {/* Footer */}
+          <Box sx={{ mt: 8, mb: 4 }}>
+            <Footer />
+          </Box>
+        </Container>
+
+
+      </Box>
+    </ThemeProvider>
   );
 }
 
